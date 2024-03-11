@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -74,16 +75,28 @@ WSGI_APPLICATION = 'biblioteca_compensar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'base_biblioteca_ucompensar',
-        'USER': 'postgres',
-           'PASSWORD': '0606',
-        'HOST': 'localhost',  # Puedes cambiar esto según tu configuración
-         'PORT': '',  # Puedes dejarlo en blanco para usar el puerto predeterminado
+        'NAME': os.getenv('ENCUESTAS_DB_NAME'),
+        'USER': os.getenv('ENCUESTAS_DB_USER'),
+        'PASSWORD': os.getenv('ENCUESTAS_DB_PASSWORD'),
+        'HOST': os.getenv('ENCUESTAS_DB_HOST'),
+        'PORT': os.getenv('ENCUESTAS_DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'base_biblioteca_ucompensar',
+#         'USER': 'postgres',
+#            'PASSWORD': '0606',
+#         'HOST': 'localhost',  # Puedes cambiar esto según tu configuración
+#          'PORT': '',  # Puedes dejarlo en blanco para usar el puerto predeterminado
+#     }
+# }
 
 
 # Password validation
