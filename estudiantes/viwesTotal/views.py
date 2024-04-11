@@ -1,20 +1,16 @@
 from rest_framework import generics
 from django.shortcuts import render
-from estudiantes.models import GradosColegiosClavesForaneas,SubGrados,GradoSubGrado,TipoDocumento,Generos,BandejaEntrante,Estantes,CategoriaLibros,Libro,Autor
-from estudiantes.serializers.estudiantes_serializers import GradosColegiosSerializer,SubGradoserializer,GradoSubGradoserializer,TipoDocumentoerializer,GenerosSerializer,BandejaEntranteSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer
+from estudiantes.models import TipoDocumento,Generos,Estantes,CategoriaLibros,Libro,Autor, Usuario
+from estudiantes.serializers.estudiantes_serializers import TipoDocumentoerializer,GenerosSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer, Usuarioserializer
 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError,NotFound,PermissionDenied
 
 
-
-
-
-# crear vita para Gradoscolegios
-class CrearGradoColegioVista(generics.CreateAPIView):
-    queryset = GradosColegiosClavesForaneas.objects.all()
-    serializer_class = GradosColegiosSerializer
+class CrearUsuario(generics.CreateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = Usuarioserializer
 
     def create(self, request, *args, **kwargs):
         try:
@@ -26,10 +22,9 @@ class CrearGradoColegioVista(generics.CreateAPIView):
             # error_message = {'error': e.detail}
             raise ValidationError(e.detail)
         
-        
-class ListarGradoColegioVista(generics.ListAPIView):
-    queryset = GradosColegiosClavesForaneas.objects.all()
-    serializer_class = GradosColegiosSerializer
+class ListarUsuario(generics.ListAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = Usuario
 
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -40,18 +35,18 @@ class ListarGradoColegioVista(generics.ListAPIView):
             'data': serializer.data
         }, status=status.HTTP_200_OK)
 
-class BorrarGradoColegioVista(generics.DestroyAPIView):
-    queryset = GradosColegiosClavesForaneas.objects.all()
-    serializer_class = GradosColegiosSerializer
+class BorrarUsuario(generics.DestroyAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = Usuarioserializer
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
-class ActualizarGradoColegioVista(generics.UpdateAPIView):
-    queryset = GradosColegiosClavesForaneas.objects.all()
-    serializer_class = GradosColegiosSerializer
+class ActualizarUsuario(generics.UpdateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = Usuarioserializer
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()  # Obtiene la instancia existente
@@ -60,116 +55,6 @@ class ActualizarGradoColegioVista(generics.UpdateAPIView):
         serializer.save()  # Guarda la instancia con los datos actualizados
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
-
-
-
-
-# crear vita para Gradoscolegios
-
-class CrearSubGradooVista(generics.CreateAPIView):
-    queryset = SubGrados.objects.all()
-    serializer_class = SubGradoserializer
-
-    def create(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response({'success':True,'detail':'persona registrada correctamente','data':serializer.data}, status=status.HTTP_201_CREATED)
-        except ValidationError  as e:
-            # error_message = {'error': e.detail}
-            raise ValidationError(e.detail)
-        
-        
-class ListarSubGradooVista(generics.ListAPIView):
-    queryset = SubGrados.objects.all()
-    serializer_class = SubGradoserializer
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'success': True,
-            'detail': 'Lista de personas registradas',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
-
-class BorrarSubGradooVista(generics.DestroyAPIView):
-    queryset = SubGrados.objects.all()
-    serializer_class = SubGradoserializer
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class ActualizarSubGradooVista(generics.UpdateAPIView):
-    queryset = SubGrados.objects.all()
-    serializer_class = SubGradoserializer
-
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtiene la instancia existente
-        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
-        serializer.is_valid(raise_exception=True)  # Valida los datos
-        serializer.save()  # Guarda la instancia con los datos actualizados
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
-
-
-# crear vita para Gradoscolegios
-class CrearGradoSubGradoVista(generics.CreateAPIView):
-    queryset = GradoSubGrado.objects.all()
-    serializer_class = GradoSubGradoserializer
-
-    def create(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response({'success':True,'detail':'persona registrada correctamente','data':serializer.data}, status=status.HTTP_201_CREATED)
-        except ValidationError  as e:
-            # error_message = {'error': e.detail}
-            raise ValidationError(e.detail)
-        
-class ListarGradoSubGradoVista(generics.ListAPIView):
-    queryset = GradoSubGrado.objects.all()
-    serializer_class = GradoSubGradoserializer
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'success': True,
-            'detail': 'Lista de personas registradas',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
-
-class BorrarGradoSubGradoVista(generics.DestroyAPIView):
-    queryset = GradoSubGrado.objects.all()
-    serializer_class = GradoSubGradoserializer
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class ActualizarGradoSubGradoVista(generics.UpdateAPIView):
-    queryset = GradoSubGrado.objects.all()
-    serializer_class = GradoSubGradoserializer
-
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtiene la instancia existente
-        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
-        serializer.is_valid(raise_exception=True)  # Valida los datos
-        serializer.save()  # Guarda la instancia con los datos actualizados
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
 
 
 
@@ -208,7 +93,7 @@ class BorrarTipoDocumentoVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 class ActualizarTipoDocumentoVista(generics.UpdateAPIView):
     queryset = TipoDocumento.objects.all()
@@ -262,7 +147,7 @@ class BorrarGeneroVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 class ActualizarGeneroVista(generics.UpdateAPIView):
     queryset = Generos.objects.all()
@@ -276,62 +161,6 @@ class ActualizarGeneroVista(generics.UpdateAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-
-
-# crear vita para tipo BandejaEntrante
-class CrearBandejaEntranteVista(generics.CreateAPIView):
-    queryset = BandejaEntrante.objects.all()
-    serializer_class = BandejaEntranteSerializer
-
-    def create(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response({'success':True,'detail':'persona registrada correctamente','data':serializer.data}, status=status.HTTP_201_CREATED)
-        except ValidationError  as e:
-            # error_message = {'error': e.detail}
-            raise ValidationError(e.detail)
-        
-class ListarBandejaEntranteVista(generics.ListAPIView):
-    queryset = BandejaEntrante.objects.all()
-    serializer_class = BandejaEntranteSerializer
-
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'success': True,
-            'detail': 'Lista de personas registradas',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
-
-class BorrarBandejaEntranteVista(generics.DestroyAPIView):
-    queryset = BandejaEntrante.objects.all()
-    serializer_class = BandejaEntranteSerializer
-
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ActualizarBandejaEntranteVista(generics.UpdateAPIView):
-    queryset = BandejaEntrante.objects.all()
-    serializer_class = BandejaEntranteSerializer
-
-
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtiene la instancia existente
-        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
-        serializer.is_valid(raise_exception=True)  # Valida los datos
-        serializer.save()  # Guarda la instancia con los datos actualizados
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
@@ -373,7 +202,7 @@ class BorrarEstantesVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ActualizarEstantesVista(generics.UpdateAPIView):
@@ -430,7 +259,7 @@ class BorrarCategoriaLibrosVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ActualizarCategoriaLibrosVista(generics.UpdateAPIView):
@@ -486,7 +315,7 @@ class BorrarLibrosVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ActualizarLibrosVista(generics.UpdateAPIView):
@@ -542,7 +371,7 @@ class BorrarAutorVista(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ActualizarAutorVista(generics.UpdateAPIView):

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'estudiantes',  # Agrega la aplicación 'estudiantes' aquí
     'corsheaders',  # Agrega esta línea
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -74,6 +75,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'biblioteca_compensar.wsgi.application'
 
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

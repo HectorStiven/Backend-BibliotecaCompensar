@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from estudiantes.models import Estudiante,Colegio,Grado,Universidad,GradosColegiosClavesForaneas,Jornada,SubGrados,GradoSubGrado,TipoDocumento,Generos,BandejaEntrante,Estantes,CategoriaLibros,Libro,Autor,LibrosAutores,Prestamo,Editorial,EstadosCopiasLibros,CopiasLibros,Catalogos,CatalogosLibros,ProgramaAcademicos,EstudianteProgramaAcademicos
+from estudiantes.models import Estudiante,Colegio,Grado,Jornada,TipoDocumento,Generos,Estantes,CategoriaLibros,Libro,Autor,Prestamo,Editorial, Usuario
 
 class EstudianteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,31 +18,16 @@ class GradoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UnivercidadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Universidad
-        fields = '__all__'
-
 
 class JornadaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jornada
         fields = '__all__'
 
-class GradosColegiosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GradosColegiosClavesForaneas
-        fields = '__all__'
 
-class SubGradoserializer(serializers.ModelSerializer):
+class Usuarioserializer(serializers.ModelSerializer):
     class Meta:
-        model = SubGrados
-        fields = '__all__'
-
-
-class GradoSubGradoserializer(serializers.ModelSerializer):
-    class Meta:
-        model = GradoSubGrado
+        model = Usuario
         fields = '__all__'
 
 class TipoDocumentoerializer(serializers.ModelSerializer):
@@ -55,12 +40,6 @@ class TipoDocumentoerializer(serializers.ModelSerializer):
 class GenerosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Generos
-        fields = '__all__'
-
-
-class BandejaEntranteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BandejaEntrante
         fields = '__all__'
 
 
@@ -87,12 +66,6 @@ class AutorSerializer(serializers.ModelSerializer):
         model = Autor
         fields = '__all__'
 
-class LibrosAutoresSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LibrosAutores
-        fields = '__all__'
-
-
 
 class PrestamoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,37 +78,3 @@ class EditorialSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class EstadosCopiasLibrosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstadosCopiasLibros
-        fields = '__all__'
-
-class CopiasLibrosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CopiasLibros
-        fields = '__all__'
-
-class CopiasLibrosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CopiasLibros
-        fields = '__all__'
-
-class CatalogosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Catalogos
-        fields = '__all__'
-
-class CatalogosLibrosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CatalogosLibros
-        fields = '__all__'
-
-class ProgramaAcademicosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProgramaAcademicos
-        fields = '__all__'
-
-class EstudianteProgramaAcademicosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EstudianteProgramaAcademicos
-        fields = '__all__'
