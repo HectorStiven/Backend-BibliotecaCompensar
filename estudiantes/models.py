@@ -197,7 +197,7 @@ class Prestamo(models.Model):
     fecha_devolucion_libro = models.DateField()
     tiempo_devolucion_dias = models.IntegerField()
     ya_devuelto = models.BooleanField()
-    fecha_devolucion_real = models.TextField(default=str(timezone.now()))  # Valor por defecto utilizando timezone.now()
+    fecha_devolucion_real = models.TextField()
     observaciones_devolucion = models.TextField()
     dias_mora = models.TextField(default='')  # Valor por defecto como cadena vacía
 

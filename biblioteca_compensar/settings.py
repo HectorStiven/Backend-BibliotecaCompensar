@@ -84,28 +84,28 @@ load_dotenv()
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv('ENCUESTAS_DB_NAME'),
-#         'USER': os.getenv('ENCUESTAS_DB_USER'),
-#         'PASSWORD': os.getenv('ENCUESTAS_DB_PASSWORD'),
-#         'HOST': os.getenv('ENCUESTAS_DB_HOST'),
-#         'PORT': os.getenv('ENCUESTAS_DB_PORT'),
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'qFYqxcJUpKPDRkbuCVOzQjVHFtwCMxAV',
-        'HOST': 'roundhouse.proxy.rlwy.net',
-        'PORT': '44073',
+        'NAME': os.getenv('ENCUESTAS_DB_NAME'),
+        'USER': os.getenv('ENCUESTAS_DB_USER'),
+        'PASSWORD': os.getenv('ENCUESTAS_DB_PASSWORD'),
+        'HOST': os.getenv('ENCUESTAS_DB_HOST'),
+        'PORT': os.getenv('ENCUESTAS_DB_PORT'),
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'qFYqxcJUpKPDRkbuCVOzQjVHFtwCMxAV',
+#         'HOST': 'roundhouse.proxy.rlwy.net',
+#         'PORT': '44073',
+#     }
+# }
 
 
 # Password validation
