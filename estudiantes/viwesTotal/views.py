@@ -22,10 +22,11 @@ class CrearUsuario(generics.CreateAPIView):
             # error_message = {'error': e.detail}
             raise ValidationError(e.detail)
         
+
 class ListarUsuario(generics.ListAPIView):
     queryset = Usuario.objects.all()
     serializer_class = Usuarioserializer
-
+    
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -34,6 +35,9 @@ class ListarUsuario(generics.ListAPIView):
             'detail': 'Lista de personas registradas',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
+
+
 
 class BorrarUsuario(generics.DestroyAPIView):
     queryset = Usuario.objects.all()
