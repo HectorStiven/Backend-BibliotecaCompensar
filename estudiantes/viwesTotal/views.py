@@ -17,10 +17,19 @@ class CrearUsuario(generics.CreateAPIView):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            return Response({'success': True, 'detail': 'Registro creado correctamente', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+           
+            
+            # Agregar lógica adicional si es necesario, por ejemplo, asignar valores antes de guardar
+            # serializer.validated_data['campo_adicional'] = valor
+
+            serializer.save()
+
+            return Response({'success': True, 'detail': 'Registro creado correctamente', 'data': serializer.data},
+                            status=status.HTTP_201_CREATED)
         except ValidationError as e:
-            raise ValidationError(e.detail)
+            # Manejar la excepción de validación de manera adecuada, por ejemplo, devolver un mensaje específico
+            raise ValidationError({'error': 'Error al crear el registro', 'detail': e.detail})
+        
 
 class ListarUsuario(generics.ListAPIView):
     queryset = Usuario.objects.all()
