@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError,NotFound,PermissionDenied
 
 class CrearUsuario(generics.CreateAPIView):
     queryset = Usuario.objects.all()
-    serializer_class = Usuarioserializer
+    serializer_class = UsuarioSerializer
 
     def post(self, request, *args, **kwargs):
         try:
