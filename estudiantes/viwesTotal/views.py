@@ -24,7 +24,7 @@ class CrearUsuario(generics.CreateAPIView):
         
 class ListarUsuario(generics.ListAPIView):
     queryset = Usuario.objects.all()
-    serializer_class = Usuario
+    serializer_class = Usuarioserializer
 
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
