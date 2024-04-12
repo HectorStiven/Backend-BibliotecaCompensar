@@ -13,7 +13,7 @@ class CrearPersonaVista(generics.CreateAPIView):
     queryset = Estudiante.objects.all()
     serializer_class = EstudianteSerializer
 
-    def create(self, request, *args, **kwargs):
+    def post (self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
