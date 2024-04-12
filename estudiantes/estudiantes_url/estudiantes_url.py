@@ -81,7 +81,7 @@ urlpatterns = [
     path('crear_autor/', views.CrearAutorVista.as_view(), name='crear_autor'),
     path('listar_autor/', views.ListarAutorVista.as_view(), name='listar_autor'),
     path('borrar_autor/<int:pk>/', views.BorrarAutorVista.as_view(), name='borrar_autor'),
-    path('actualizar_autor/<int:pk>/', views.ActualizarAutorVista.as_view(), name='actualizar_autor'),
+    # path('actualizar_autor/<int:pk>/', views.ActualizarAutorVista.as_view(), name='actualizar_autor'),
 
 
 ]
