@@ -42,8 +42,7 @@ urlpatterns = [
     
 
     # URLs para Usuario
-    path('crear_usuario/', views.Cre
-         arUsuario.as_view(), name='crear_usuario'),
+    path('crear_usuario/', views.CrearUsuario.as_view(), name='crear_usuario'),
     path('listar_usuario/', views.ListarUsuario.as_view(), name='listar_usuario'),
     path('borrar_usuario/<int:pk>/', views.BorrarUsuario.as_view(), name='borrar_usuario'),
     path('actualizar_usuario/<int:pk>/', views.ActualizarUsuario.as_view(), name='actualizar_usuario'),

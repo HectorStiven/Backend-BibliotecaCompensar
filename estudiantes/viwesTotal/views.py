@@ -13,7 +13,7 @@ class CrearUsuario(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = Usuarioserializer
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
