@@ -14,21 +14,12 @@ class CrearUsuario(generics.CreateAPIView):
     serializer_class = Usuarioserializer
 
     def create(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            
-            # Si deseas agregar lógica adicional, puedes hacerlo aquí antes de guardar
-            # por ejemplo, asignar valores adicionales a los datos serializados
-            
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
             serializer.save()
-            
-            return Response({'success': True, 'detail': 'Registro creado correctamente', 'data': serializer.data},
-                            status=status.HTTP_201_CREATED)
-        except ValidationError as e:
-            # Manejar la excepción de validación de manera adecuada, por ejemplo, devolver un mensaje específico
-            return Response({'error': 'Error al crear el registro', 'detail': e.detail},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': True, 'detail': 'Usuario creado correctamente'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 class ListarUsuario(generics.ListAPIView):
