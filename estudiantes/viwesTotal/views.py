@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError,NotFound,PermissionDenied
 
 
+
 class CrearUsuario(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = Usuarioserializer
@@ -16,11 +17,10 @@ class CrearUsuario(generics.CreateAPIView):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            self.perform_create(serializer)
             return Response({'success': True, 'detail': 'Registro creado correctamente', 'data': serializer.data}, status=status.HTTP_201_CREATED)
         except ValidationError as e:
             raise ValidationError(e.detail)
-        
 
 class ListarUsuario(generics.ListAPIView):
     queryset = Usuario.objects.all()
