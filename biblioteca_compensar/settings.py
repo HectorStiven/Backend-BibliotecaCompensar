@@ -94,7 +94,6 @@ DATABASES = {
         'PORT': os.getenv('ENCUESTAS_DB_PORT'),
     }
 }
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
