@@ -17,9 +17,8 @@ class CrearUsuario(generics.CreateAPIView):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({'success':True,'detail':'persona registrada correctamente','data':serializer.data}, status=status.HTTP_201_CREATED)
-        except ValidationError  as e:
-            # error_message = {'error': e.detail}
+            return Response({'success': True, 'detail': 'Registro creado correctamente', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
             raise ValidationError(e.detail)
         
 
