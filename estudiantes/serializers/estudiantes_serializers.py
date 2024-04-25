@@ -55,11 +55,15 @@ class CategoriaLibrosSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoriaLibros
         fields = '__all__'
-
 class LibroSerializer(serializers.ModelSerializer):
+    categoriaLibro = serializers.SlugRelatedField(slug_field='nombre_categoria', queryset=CategoriaLibros.objects.all())
+    Editorial = serializers.SlugRelatedField(slug_field='nombre', queryset=Editorial.objects.all())
+    id_Autor = serializers.PrimaryKeyRelatedField(queryset=Autor.objects.all())
+    id_estante = serializers.SlugRelatedField(slug_field='id_estante', queryset=Estantes.objects.all())
+
     class Meta:
         model = Libro
-        fields = '__all__'
+        fields = ['idISBN', 'titulo', 'disponibleEnBiblioteca', 'agno_publicacion', 'descripcion', 'estado_libro', 'cantidad_copias', 'categoriaLibro', 'Editorial', 'id_Autor', 'id_estante']
 
 class AutorSerializer(serializers.ModelSerializer):
     class Meta:
