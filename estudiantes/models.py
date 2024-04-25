@@ -41,7 +41,7 @@ class Grado(models.Model):
     cod_jornada = models.ForeignKey(Jornada, on_delete=models.SET_NULL, null=True, blank=True)
     numero_sub_grado = models.CharField(max_length=100, primary_key=True)
     cod_colegio = models.CharField(max_length=10)
-    def __str__(self):
+    def __str__(self): 
         return self.nombre_grado
 
     class Meta:
@@ -177,9 +177,10 @@ class Libro(models.Model):
     agno_publicacion = models.PositiveIntegerField(null=True,blank=True)  # Año de publicación
     descripcion = models.TextField(null=True,blank=True)  # Descripción
     id_Autor = models.ForeignKey(Autor, on_delete=models.CASCADE, related_name='libros_id_Autor')
-    estado = models.CharField(max_length=100, default='Disponible')  # Estado del libro
+    # estado = models.CharField(max_length=100, default='Disponible')  # Estado del libro
+    estado_libro = models.BooleanField(default=True)  # Estado del libro, por defecto disponible
     id_estante = models.ForeignKey(Estantes, on_delete=models.SET_NULL, null=True, blank=True)
-
+    cantidad_copias=models.IntegerField(default=1)
     def __str__(self):
         return self.titulo
 
