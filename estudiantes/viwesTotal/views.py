@@ -1,7 +1,7 @@
 from rest_framework import generics
 from django.shortcuts import render
 from estudiantes.models import TipoDocumento,Generos,Estantes,CategoriaLibros,Libro,Autor, Usuario
-from estudiantes.serializers.estudiantes_serializers import TipoDocumentoerializer,GenerosSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer, Usuarioserializer
+from estudiantes.serializers.estudiantes_serializers import TipoDocumentoerializer,LibroPostSerializer,GenerosSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer, Usuarioserializer
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -284,7 +284,7 @@ class ActualizarCategoriaLibrosVista(generics.UpdateAPIView):
 # crear vita para tipo Libro
 class CrearLibrosVista(generics.CreateAPIView):
     queryset = Libro.objects.all()
-    serializer_class = LibroSerializer
+    serializer_class = LibroPostSerializer
 
     def create(self, request, *args, **kwargs):
         try:

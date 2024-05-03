@@ -82,3 +82,10 @@ class LibroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Libro
         fields = ['idISBN', 'titulo', 'disponibleEnBiblioteca', 'agno_publicacion', 'descripcion', 'estado_libro', 'cantidad_copias', 'categoriaLibro', 'Editorial', 'id_Autor', 'id_estante']
+
+
+class LibroPostSerializer(serializers.ModelSerializer):
+ 
+    class Meta:
+        model = Libro
+        fields = '__all__'
