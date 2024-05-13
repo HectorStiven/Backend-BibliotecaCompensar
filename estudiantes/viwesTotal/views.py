@@ -76,6 +76,20 @@ class CrearTipoDocumentoVista(generics.CreateAPIView):
             # error_message = {'error': e.detail}
             raise ValidationError(e.detail)
         
+
+# class ListarTipoDocumentoVista(generics.ListAPIView):
+#     queryset = TipoDocumento.objects.all()
+#     serializer_class = TipoDocumentoerializer
+
+#     def get(self, request, *args, **kwargs):
+#         queryset = self.filter_queryset(self.get_queryset())
+#         serializer = self.get_serializer(queryset, many=True)
+#         return Response({
+#             'success': True,
+#             'detail': 'Lista de personas registradas',
+#             'data': serializer.data
+#         }, status=status.HTTP_200_OK)
+    
 class ListarTipoDocumentoVista(generics.ListAPIView):
     queryset = TipoDocumento.objects.all()
     serializer_class = TipoDocumentoerializer
@@ -88,6 +102,21 @@ class ListarTipoDocumentoVista(generics.ListAPIView):
             'detail': 'Lista de personas registradas',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
+class ListarGeneroVista(generics.ListAPIView):
+    queryset = Generos.objects.all()
+    serializer_class = GenerosSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'success': True,
+            'detail': 'Lista de personas registradas',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
 
 class BorrarTipoDocumentoVista(generics.DestroyAPIView):
     queryset = TipoDocumento.objects.all()
@@ -130,18 +159,6 @@ class CrearGeneroVista(generics.CreateAPIView):
             # error_message = {'error': e.detail}
             raise ValidationError(e.detail)
         
-class ListarGeneroVista(generics.ListAPIView):
-    queryset = Generos.objects.all()
-    serializer_class = GenerosSerializer
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'success': True,
-            'detail': 'Lista de personas registradas',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
 
 class BorrarGeneroVista(generics.DestroyAPIView):
     queryset = Generos.objects.all()

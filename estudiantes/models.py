@@ -194,12 +194,12 @@ class Libro(models.Model):
 class Prestamo(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
-    fecha_prestamo = models.DateField()
-    fecha_devolucion_libro = models.DateField()
+    fecha_prestamo = models.DateField( null=True, blank=True)
+    fecha_devolucion_libro = models.DateField( null=True, blank=True)
     tiempo_devolucion_dias = models.IntegerField()
     ya_devuelto = models.BooleanField()
-    fecha_devolucion_real = models.TextField()
-    observaciones_devolucion = models.TextField()
+    fecha_devolucion_real = models.DateField( null=True, blank=True)
+    observaciones_devolucion = models.TextField( null=True, blank=True)
     dias_mora = models.TextField(default='')  # Valor por defecto como cadena vacía
 
     def __str__(self):

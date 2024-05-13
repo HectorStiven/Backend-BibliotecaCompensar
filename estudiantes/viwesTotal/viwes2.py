@@ -134,6 +134,8 @@ class ListarGradosVista(generics.ListAPIView):
             'detail': 'Lista de Grados registradss',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+    
+    
 class BorrarGradosVista(generics.DestroyAPIView):
     queryset = Grado.objects.all()
     serializer_class = GradoSerializer
