@@ -313,20 +313,39 @@ class CrearLibrosVista(generics.CreateAPIView):
             # error_message = {'error': e.detail}
             raise ValidationError(e.detail)
         
-class ListarLibrosVista(generics.ListAPIView):
-    queryset = Libro.objects.all()
-    serializer_class =LibroSerializer
 
+      
+class ListarLibrosVista(generics.ListAPIView):
+    serializer_class = LibroSerializer
+
+    def get_queryset(self):
+        queryset = Libro.objects.all()
+        titulo = self.request.query_params.get('titulo', None)
+        disponible = self.request.query_params.get('disponibleEnBiblioteca', None)
+        editorial = self.request.query_params.get('Editorial', None)
+        agno_publicacion = self.request.query_params.get('agno_publicacion', None)
+
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo)
+        if disponible is not None:
+            queryset = queryset.filter(disponibleEnBiblioteca=disponible.lower() == 'true')
+        if editorial:
+            queryset = queryset.filter(Editorial__nombre__icontains=editorial)
+        if agno_publicacion:
+            queryset = queryset.filter(agno_publicacion=agno_publicacion)
+
+        return queryset
 
     def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response({
             'success': True,
-            'detail': 'Lista de personas registradas',
+            'detail': 'Lista de libros',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
-
+    
+    
 class BorrarLibrosVista(generics.DestroyAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer

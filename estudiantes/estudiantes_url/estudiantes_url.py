@@ -1,6 +1,7 @@
 from django.urls import path
 from estudiantes.viwesTotal import viwes2 as views2
 from estudiantes.viwesTotal import views as views
+from estudiantes.viwesTotal import viwes_special as viwes_special
 
 
 urlpatterns = [
@@ -33,6 +34,8 @@ urlpatterns = [
     path('obtener_prestamo/', views2.ListarPrestamoVista.as_view(), name='obtener_prestamo'),
     path('borrar_prestamo/<int:pk>/', views2.BorrarPrestamoVista.as_view(), name='borrar_prestamo'),
     path('actualizar_prestamo/<int:pk>/', views2.ActualizarPrestamoVista.as_view(), name='actualizar_prestamo'),
+
+    path('devolver-libro/<int:prestamo_id>/', views2.DevolverLibroVista.as_view(), name='devolver-libro'),
 
     # URLs para Editorial
     path('crear_editorial/', views2.CrearEditorialVista.as_view(), name='crear_editorial'),
@@ -81,7 +84,12 @@ urlpatterns = [
     path('crear_autor/', views.CrearAutorVista.as_view(), name='crear_autor'),
     path('listar_autor/', views.ListarAutorVista.as_view(), name='listar_autor'),
     path('borrar_autor/<int:pk>/', views.BorrarAutorVista.as_view(), name='borrar_autor'),
-    # path('actualizar_autor/<int:pk>/', views.ActualizarAutorVista.as_view(), name='actualizar_autor'),
+    path('actualizar_autor/<int:pk>/', views.ActualizarAutorVista.as_view(), name='actualizar_autor'),
+
+
+
+    path('enviar_correo/', viwes_special.EnviarCorreoElectronico.as_view(), name='enviar_correo'),
+    path('actualizar-todos-prestamos/', viwes_special.ActualizarTodosPrestamosView.as_view(), name='actualizar-todos-prestamos'),
 
 
 ]
