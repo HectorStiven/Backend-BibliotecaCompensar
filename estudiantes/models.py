@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from datetime import date
 
 
 
@@ -36,10 +36,10 @@ class Jornada(models.Model):
 
 
 class Grado(models.Model):
+    numero_sub_grado = models.CharField(max_length=100, primary_key=True)
     nombre_grado = models.CharField(max_length=100)
     nombre_subgrado = models.CharField(max_length=100)
     cod_jornada = models.ForeignKey(Jornada, on_delete=models.SET_NULL, null=True, blank=True)
-    numero_sub_grado = models.CharField(max_length=100, primary_key=True)
     cod_colegio = models.CharField(max_length=10)
     def __str__(self): 
         return self.nombre_grado
@@ -170,17 +170,19 @@ class Estantes(models.Model):
 class Libro(models.Model):
     idISBN = models.CharField(max_length=13, primary_key=True)
     titulo = models.CharField(max_length=200)
-    categoriaLibro = models.ForeignKey(CategoriaLibros, on_delete=models.CASCADE)
+    categoriaLibro = models.ForeignKey(CategoriaLibros, on_delete=models.PROTECT)
     disponibleEnBiblioteca = models.BooleanField(default=True)
     Editorial = models.ForeignKey(Editorial, on_delete=models.SET_NULL, null=True, blank=True)
     id_Autor = models.ForeignKey(Autor, on_delete=models.SET_NULL, null=True, blank=True)
     agno_publicacion = models.PositiveIntegerField(null=True,blank=True)  # Año de publicación
     descripcion = models.TextField(null=True,blank=True)  # Descripción
-    id_Autor = models.ForeignKey(Autor, on_delete=models.CASCADE, related_name='libros_id_Autor')
+    id_Autor = models.ForeignKey(Autor, on_delete=models.PROTECT, related_name='libros_id_Autor')
     # estado = models.CharField(max_length=100, default='Disponible')  # Estado del libro
     estado_libro = models.BooleanField(default=True)  # Estado del libro, por defecto disponible
     id_estante = models.ForeignKey(Estantes, on_delete=models.SET_NULL, null=True, blank=True)
     cantidad_copias=models.IntegerField(default=1)
+    cantidad_inventario=models.IntegerField(default=1)
+
     def __str__(self):
         return self.titulo
 
@@ -192,15 +194,15 @@ class Libro(models.Model):
 
 
 class Prestamo(models.Model):
-    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.PROTECT)
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.PROTECT)
     fecha_prestamo = models.DateField( null=True, blank=True)
     fecha_devolucion_libro = models.DateField( null=True, blank=True)
     tiempo_devolucion_dias = models.IntegerField()
     ya_devuelto = models.BooleanField()
     fecha_devolucion_real = models.DateField( null=True, blank=True)
     observaciones_devolucion = models.TextField( null=True, blank=True)
-    dias_mora = models.TextField(default='')  # Valor por defecto como cadena vacía
+    dias_mora = models.TextField(default=0)  # Valor por defecto como cadena vacía
 
     def __str__(self):
         return f"Prestamo de {self.libro} a {self.estudiante}"
@@ -209,6 +211,7 @@ class Prestamo(models.Model):
         verbose_name = 'Prestamo'
         verbose_name_plural = 'Prestamos'
         db_table = 'T010Prestamos'
+
 
 
 class Usuario(models.Model):
