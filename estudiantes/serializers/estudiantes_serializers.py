@@ -30,6 +30,9 @@ class Usuarioserializer(serializers.ModelSerializer):
         model = Usuario
         fields = '__all__'
 
+
+
+
 class TipoDocumentoerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoDocumento
@@ -89,3 +92,30 @@ class LibroPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Libro
         fields = '__all__'
+
+
+class UsuarioserializerLogin(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['numeroDocumento', 'crearContrasena']  # Solo incluir los campos requeridos
+
+    def validate_numeroDocumento(self, value):
+        if not value:
+            raise serializers.ValidationError("El número de documento es obligatorio.")
+        return value
+
+    def validate_crearContrasena(self, value):
+        if not value:
+            raise serializers.ValidationError("La contraseña es obligatoria.")
+        return value
+    
+
+
+class AuthSerializer(serializers.Serializer):
+    numeroDocumento = serializers.CharField(required=True)
+    crearContrasena = serializers.CharField(required=True)
+
+    def validate_crearContrasena(self, value):
+        if not value:
+            raise serializers.ValidationError("La contraseña es obligatoria.")
+        return value

@@ -1,63 +1,11 @@
 from rest_framework import generics
 from django.shortcuts import render
-from estudiantes.models import TipoDocumento,Generos,Estantes,CategoriaLibros,Libro,Autor, Usuario
-from estudiantes.serializers.estudiantes_serializers import TipoDocumentoerializer,LibroPostSerializer,GenerosSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer, Usuarioserializer
+from estudiantes.models import TipoDocumento,Generos,Estantes,CategoriaLibros,Libro,Autor
+from estudiantes.serializers.estudiantes_serializers import TipoDocumentoerializer,LibroPostSerializer,GenerosSerializer,EstantesSerializer,CategoriaLibrosSerializer,LibroSerializer,AutorSerializer
 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError,NotFound,PermissionDenied
-
-
-
-class CrearUsuario(generics.CreateAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = Usuarioserializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'success': True, 'detail': 'Usuario creado correctamente'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-
-class ListarUsuario(generics.ListAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = Usuarioserializer
-    
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            'success': True,
-            'detail': 'Lista de personas registradas',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
-
-
-
-
-class BorrarUsuario(generics.DestroyAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = Usuarioserializer
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_200_OK)
-
-class ActualizarUsuario(generics.UpdateAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = Usuarioserializer
-
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtiene la instancia existente
-        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get('partial', False))
-        serializer.is_valid(raise_exception=True)  # Valida los datos
-        serializer.save()  # Guarda la instancia con los datos actualizados
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 

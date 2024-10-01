@@ -1,6 +1,7 @@
 from django.urls import path
 from estudiantes.viwesTotal import viwes2 as views2
 from estudiantes.viwesTotal import views as views
+from estudiantes.viwesTotal import Login as Login
 from estudiantes.viwesTotal import viwes_special as viwes_special
 
 
@@ -44,11 +45,6 @@ urlpatterns = [
     path('actualizar_editorial/<int:pk>/', views2.ActualizarEditorialVista.as_view(), name='actualizar_editorial'),
     
 
-    # URLs para Usuario
-    path('crear_usuario/', views.CrearUsuario.as_view(), name='crear_usuario'),
-    path('listar_usuario/', views.ListarUsuario.as_view(), name='listar_usuario'),
-    path('borrar_usuario/<int:pk>/', views.BorrarUsuario.as_view(), name='borrar_usuario'),
-    path('actualizar_usuario/<int:pk>/', views.ActualizarUsuario.as_view(), name='actualizar_usuario'),
 
     # URLs para TipoDocumento
     path('crear_tipo_documento/', views.CrearTipoDocumentoVista.as_view(), name='crear_tipo_documento'),
@@ -85,6 +81,14 @@ urlpatterns = [
     path('listar_autor/', views.ListarAutorVista.as_view(), name='listar_autor'),
     path('borrar_autor/<int:pk>/', views.BorrarAutorVista.as_view(), name='borrar_autor'),
     path('actualizar_autor/<int:pk>/', views.ActualizarAutorVista.as_view(), name='actualizar_autor'),
+
+
+    # URLs para Usuario
+    path('crear_usuario/', Login.CrearUsuario.as_view(), name='crear_usuario'),
+    path('listar_usuario/', Login.ListarUsuario.as_view(), name='listar_usuario'),
+    path('borrar_usuario/<int:pk>/', Login.BorrarUsuario.as_view(), name='borrar_usuario'),
+    path('actualizar_usuario/<int:pk>/', Login.ActualizarUsuario.as_view(), name='actualizar_usuario'),
+    path('autenticacion', Login.AutenticacionUsuario.as_view(), name='actualizar_usuario'),
 
 
 

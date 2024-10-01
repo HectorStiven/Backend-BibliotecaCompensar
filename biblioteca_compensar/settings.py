@@ -47,8 +47,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'estudiantes',  # Agrega la aplicación 'estudiantes' aquí
     'corsheaders',  # Agrega esta línea
-    'rest_framework'
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

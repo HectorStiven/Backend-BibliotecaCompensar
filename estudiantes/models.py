@@ -214,13 +214,14 @@ class Prestamo(models.Model):
 
 
 
+
 class Usuario(models.Model):
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
     telefono = models.CharField(max_length=15)
     celular = models.CharField(max_length=15)
     tipoDocumento = models.CharField(max_length=50)
-    numeroDocumento = models.CharField(max_length=50)
+    numeroDocumento = models.CharField(max_length=50, unique=True)  # Asegúrate de que sea único
     tipoUsuario = models.CharField(max_length=50)
     genero = models.CharField(max_length=20)
     ocupacion = models.CharField(max_length=100)
