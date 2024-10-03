@@ -1,31 +1,52 @@
 from rest_framework import generics
 from estudiantes.models import  Usuario
-from estudiantes.serializers.estudiantes_serializers import Usuarioserializer,AuthSerializer
+from estudiantes.serializers.estudiantes_serializers import Usuarioserializer
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated  # Importar la clase de permisos
 
 
 
 
+from django.contrib.auth.hashers import make_password, check_password
+
+
+
+
+
+# Crear Usuario
 class CrearUsuario(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = Usuarioserializer
 
+    def perform_create(self, serializer):
+        # Hasheando la contraseña antes de guardar el usuario
+        crearContrasena = serializer.validated_data.get('crearContrasena')
+        hashed_password = make_password(crearContrasena)
+        serializer.save(crearContrasena=hashed_password)
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({'success': True, 'detail': 'Usuario creado correctamente'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            self.perform_create(serializer)
+            return Response({
+                'success': True,
+                'detail': 'Usuario creado correctamente',
+                'data': serializer.data
+            }, status=status.HTTP_201_CREATED)
+        return Response({
+            'success': False,
+            'detail': 'Error al crear el usuario',
+            'data': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class ListarUsuario(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = Usuario.objects.all()
     serializer_class = Usuarioserializer
-    
+    permission_classes = [IsAuthenticated]  # Asegúrate de que se requiera autenticación
+
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
@@ -34,6 +55,7 @@ class ListarUsuario(generics.ListAPIView):
             'detail': 'Lista de personas registradas',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
 
 
 
@@ -63,70 +85,44 @@ class ActualizarUsuario(generics.UpdateAPIView):
 
 from django.contrib.auth.hashers import make_password, is_password_usable
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
-from rest_framework.permissions import AllowAny
+
 
 class AutenticacionUsuario(generics.GenericAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = AuthSerializer
+    serializer_class = Usuarioserializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        numero_identificacion = request.data.get('numero_identificacion')
+        contrasena = request.data.get('contrasena')
 
-        # Validar datos del serializer
-        if not serializer.is_valid():
-            print("Errores de validación:", serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Validar campos vacíos
+        if not numero_identificacion or not contrasena:
+            return Response({
+                'success': False,
+                'detail': 'Número de identificación y contraseña son requeridos.'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
-        numero_documento = serializer.validated_data['numeroDocumento']
-        contrasena = serializer.validated_data['crearContrasena']
-
-        print(f"Intentando autenticar usuario: {numero_documento}")
-
+        # Buscar usuario por número de identificación
         try:
-            # Buscar el usuario
-            usuario = Usuario.objects.get(numeroDocumento=numero_documento)
-            print(f"Usuario encontrado: {usuario}")
-
-            # Verificar la contraseña usando un método personalizado
-            if self.verify_password(contrasena, usuario.crearContrasena):
-                print("Contraseña correcta.")
-
-                # Generar tokens
-                access_token = AccessToken.for_user(usuario)
-                refresh_token = RefreshToken.for_user(usuario)
-
-                usuario_data = {
-                    'id': usuario.id,
-                    'numeroDocumento': usuario.numeroDocumento,
-                    # Agrega más campos según sea necesario
-                }
-
-                print(f"Token de acceso generado: {str(access_token)}")
-                print(f"Token de actualización generado: {str(refresh_token)}")
-
-                return Response({
-                    'success': True,
-                    'token': str(access_token),
-                    'refresh': str(refresh_token),
-                    'data': usuario_data,
-                }, status=status.HTTP_200_OK)
-            else:
-                print("Contraseña incorrecta.")
-                return Response({'success': False, 'detail': 'Contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
-
+            usuario = Usuario.objects.get(numeroDocumento=numero_identificacion)
         except Usuario.DoesNotExist:
-            print("Usuario no encontrado.")
-            return Response({'success': False, 'detail': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({
+                'success': False,
+                'detail': 'Usuario no encontrado.'
+            }, status=status.HTTP_404_NOT_FOUND)
 
-        except Usuario.MultipleObjectsReturned:
-            print("Múltiples usuarios encontrados.")
-            return Response({'success': False, 'detail': 'Múltiples usuarios encontrados con el mismo número de documento'}, status=status.HTTP_400_BAD_REQUEST)
+        # Comparar contraseñas usando check_password
+        if check_password(contrasena, usuario.crearContrasena):  # Asegúrate de que este campo es el correcto para la contraseña
+            # Generar tokens JWT
+            refresh = RefreshToken.for_user(usuario)
+            access_token = refresh.access_token
 
-        except Exception as e:
-            print(f"Ocurrió un error: {str(e)}")
-            return Response({'success': False, 'detail': 'Ocurrió un error en el servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def verify_password(self, provided_password, stored_password):
-        # Método simple para verificar la contraseña
-        # Este es solo un ejemplo. Asegúrate de usar un método seguro para tu aplicación.
-        return provided_password == stored_password
+            return Response({
+                'detail': 'Login exitoso.',
+                'token': str(access_token),
+                'data': Usuarioserializer(usuario).data
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'success': False,
+                'detail': 'Contraseña incorrecta.'
+            }, status=status.HTTP_400_BAD_REQUEST)

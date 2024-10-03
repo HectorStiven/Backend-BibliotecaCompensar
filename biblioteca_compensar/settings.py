@@ -50,15 +50,22 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
 ]
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
-    }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta( minutes=60),  # El token expira en 60 minutos
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),  # El token de refresco dura 1 día
+    'ROTATE_REFRESH_TOKENS': True,  # Rota el token de refresco
+    'BLACKLIST_AFTER_ROTATION': True,  # Revoca el token anterior después de usar uno nuevo
+}
+
 
 
 MIDDLEWARE = [

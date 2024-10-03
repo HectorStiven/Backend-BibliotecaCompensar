@@ -236,10 +236,7 @@ class Usuario(models.Model):
     celularFamiliar = models.CharField(max_length=15)
     parentesco = models.CharField(max_length=50)
     crearUsuario = models.BooleanField(default=False)
-    crearContrasena = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f"{self.nombres} {self.apellidos}"
+    crearContrasena = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = 'Usuario'
