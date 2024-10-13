@@ -60,13 +60,10 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta( minutes=60),  # El token expira en 60 minutos
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),  # El token de refresco dura 1 día
-    'ROTATE_REFRESH_TOKENS': True,  # Rota el token de refresco
-    'BLACKLIST_AFTER_ROTATION': True,  # Revoca el token anterior después de usar uno nuevo
+    'ACCESS_TOKEN_LIFETIME': timedelta( minutes=2),  # El token expira en 60 minutos
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=3),  # El token de refresco dura 1 día
+
 }
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -177,3 +174,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGIN = ['*']
+
+AUTH_USER_MODEL = 'estudiantes.Usuario'

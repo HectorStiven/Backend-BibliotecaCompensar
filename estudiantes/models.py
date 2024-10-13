@@ -213,20 +213,41 @@ class Prestamo(models.Model):
         db_table = 'T010Prestamos'
 
 
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+class UsuarioManager(BaseUserManager):
+    def create_user(self, correo_electronico, contrasena=None, **extra_fields):
+        if not correo_electronico:
+            raise ValueError('El usuario debe tener un correo electrónico')
 
-class Usuario(models.Model):
+        correo_electronico = self.normalize_email(correo_electronico)
+        user = self.model(correo_electronico=correo_electronico, **extra_fields)
+        
+        # Guardar la contraseña en tu campo `contrasena` sin usar el método `set_password`
+        if contrasena:
+            user.contrasena = contrasena
+
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, correo_electronico, contrasena=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(correo_electronico, contrasena, **extra_fields)
+    
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
     telefono = models.CharField(max_length=15)
     celular = models.CharField(max_length=15)
     tipoDocumento = models.CharField(max_length=50)
-    numeroDocumento = models.CharField(max_length=50, unique=True)  # Asegúrate de que sea único
+    numeroDocumento  = models.CharField(max_length=50, unique=True)  # Asegúrate de que sea único
     tipoUsuario = models.CharField(max_length=50)
     genero = models.CharField(max_length=20)
     ocupacion = models.CharField(max_length=100)
     fecha_nacimiento = models.DateField()
-    correoElectronico = models.EmailField()
+    correo_electronico = models.EmailField(max_length=255, unique=True)  # Asegúrate de que sea único
     pais = models.CharField(max_length=100)
     departamento = models.CharField(max_length=100)
     municipio = models.CharField(max_length=100)
@@ -236,7 +257,29 @@ class Usuario(models.Model):
     celularFamiliar = models.CharField(max_length=15)
     parentesco = models.CharField(max_length=50)
     crearUsuario = models.BooleanField(default=False)
-    crearContrasena = models.CharField(max_length=200)
+    contrasena = models.CharField(max_length=200)
+
+
+    # Añadir related_name únicos para evitar conflictos
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='usuario_groups',  # Cambia el related_name para evitar el choque
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='usuario_permissions',  # Cambia el related_name para evitar el choque
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+    objects = UsuarioManager()
+
+    USERNAME_FIELD = 'correo_electronico'
+    REQUIRED_FIELDS = ['nombres', 'apellidos']
 
     class Meta:
         verbose_name = 'Usuario'

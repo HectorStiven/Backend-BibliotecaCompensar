@@ -25,14 +25,42 @@ class JornadaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# class Usuarioserializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Usuario
+#         fields = '__all__'
+
 class Usuarioserializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = '__all__'
-
-
-
-
+        fields = [
+            'numeroDocumento', 
+            'nombres', 
+            'apellidos', 
+            'telefono', 
+            'celular', 
+            'tipoDocumento', 
+            'tipoUsuario', 
+            'genero', 
+            'ocupacion', 
+            'fecha_nacimiento', 
+            'correo_electronico', 
+            'pais', 
+            'departamento', 
+            'municipio', 
+            'codigoPostal', 
+            'direccion', 
+            'nombreFamiliar', 
+            'celularFamiliar', 
+            'parentesco', 
+            'crearUsuario', 
+            'contrasena'
+        ]
+    extra_kwargs = {
+            'contrasena': {'write_only': True}  # Evitar que la contraseña sea retornada en las respuestas
+        }
+    
+    
 class TipoDocumentoerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoDocumento
@@ -94,28 +122,3 @@ class LibroPostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UsuarioserializerLogin(serializers.ModelSerializer):
-    class Meta:
-        model = Usuario
-        fields = ['numeroDocumento', 'crearContrasena']  # Solo incluir los campos requeridos
-
-    def validate_numeroDocumento(self, value):
-        if not value:
-            raise serializers.ValidationError("El número de documento es obligatorio.")
-        return value
-
-    def validate_crearContrasena(self, value):
-        if not value:
-            raise serializers.ValidationError("La contraseña es obligatoria.")
-        return value
-    
-
-
-class AuthSerializer(serializers.Serializer):
-    numeroDocumento = serializers.CharField(required=True)
-    crearContrasena = serializers.CharField(required=True)
-
-    def validate_crearContrasena(self, value):
-        if not value:
-            raise serializers.ValidationError("La contraseña es obligatoria.")
-        return value
